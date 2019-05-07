@@ -1,26 +1,36 @@
 package smutkiewicz.dafttapchallenge.database
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import smutkiewicz.dafttapchallenge.entity.Score
 
 class ScoresRepository(private val scoreDao: ScoreDao): Scores {
 
-    override fun add(score: Score): Boolean {
+    override suspend fun add(score: Score): Boolean = withContext(Dispatchers.Default) {
         val scoresHigherThanMine = scoreDao.getScoresHigherThan(score.amountOfTaps)
 
-        if(scoresHigherThanMine.size < 5) {
+        if (scoresHigherThanMine.size < MAX_RESULTS) {
             scoreDao.add(DbScore.fromEntity(score))
-            return true
+            return@withContext true
         }
 
-        return false
+        false
     }
 
-    override fun getTopFiveScores(): List<Score> {
+    override suspend fun getTopFiveScores(): List<Score> = withContext(Dispatchers.Default) {
         val list = scoreDao.get()
-        val amountOfResults = if (list.size > 5) 5 else list.size
+        val amountOfResults = if (list.size > MAX_RESULTS) MAX_RESULTS else list.size
         var position = 1
 
-        return if(list.isEmpty()) emptyList()
-        else list.subList(0, amountOfResults).map { it.toEntity(position++) }.toList()
+        list
+            .takeIf { list.isNotEmpty() }
+            ?.subList(0, amountOfResults)
+            ?.map { it.toEntity(position++) }
+            ?.toList()
+            ?: emptyList()
+    }
+
+    private companion object {
+        const val MAX_RESULTS = 5
     }
 }

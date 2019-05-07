@@ -6,6 +6,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import smutkiewicz.dafttapchallenge.R
 import smutkiewicz.dafttapchallenge.util.ViewAnimator
 import smutkiewicz.dafttapchallenge.view.viewmodel.GameViewModel
@@ -40,8 +44,8 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
     }
 
     private fun prepareGame() {
-        timerTv.text = getString(R.string.sample_game_time)
         tapsTv.text = getString(R.string.get_ready)
+        timerTv.text = getString(R.string.sample_game_time)
 
         launchPrepareCountDownTimer()
     }
@@ -89,8 +93,12 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
         viewModel.setTaps(gameAreaView.touchCount)
 
         // handle High Scores
-        val isMyScoreHighScore = viewModel.addToTopScores()
-        showResultAlertDialog(isMyScoreHighScore)
+        GlobalScope.async {
+            val isMyScoreAddedAsHighScore = viewModel.addToHighScores()
+            withContext(Dispatchers.Main) {
+                showResultAlertDialog(isMyScoreAddedAsHighScore)
+            }
+        }
     }
 
     private fun launchPrepareCountDownTimer() {

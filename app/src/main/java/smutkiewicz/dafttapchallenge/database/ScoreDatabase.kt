@@ -17,7 +17,6 @@ abstract class ScoresDatabase: RoomDatabase() {
             if (ScoresDatabase.Companion::INSTANCE.isInitialized.not()) {
                 INSTANCE = Room
                     .databaseBuilder(context, ScoresDatabase::class.java, dbName)
-                    .allowMainThreadQueries()
                     .build()
             }
         }

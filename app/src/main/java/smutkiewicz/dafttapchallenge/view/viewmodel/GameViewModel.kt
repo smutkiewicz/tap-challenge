@@ -25,12 +25,7 @@ class GameViewModel(private val repository: Scores) : ViewModel() {
         score.amountOfTaps += taps
     }
 
-    fun addToTopScores(): Boolean {
-        var isMyScoreHighScore = false
-        isMyScoreHighScore = repository.add(score)
-
-        return isMyScoreHighScore
-    }
+    suspend fun addToHighScores() = repository.add(score)
 
     fun obtainResult() = score.amountOfTaps
 }
