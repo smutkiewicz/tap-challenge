@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="64dp" android:background="@color/gray">
+
+    <TextView
+            android:id="@+id/scorePositionTv"
+            style="@style/TopScore"
+            android:text="@string/score_position"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+            android:id="@+id/scoreTapsAmountTv"
+            style="@style/TopScore"
+            android:text="@string/score_amount_of_taps"
+            app:layout_constraintStart_toEndOf="@+id/scorePositionTv"
+            android:layout_marginStart="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/scoreTimestampTv" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0" android:ellipsize="end" android:lines="1" android:maxLines="1"/>
+
+    <TextView
+            android:id="@+id/scoreTimestampTv"
+            style="@style/TopScoreTimestamp"
+            android:text="@string/score_sample_timestamp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintVertical_bias="0.51" android:layout_width="0dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
