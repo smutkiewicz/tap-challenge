@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import smutkiewicz.dafttapchallenge.R
 import smutkiewicz.dafttapchallenge.util.ViewAnimator
@@ -40,7 +40,7 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
     }
 
     override fun onTouchCount(touchCount: Int) {
-        tapsTv.text = getString(R.string.taps, touchCount)
+        tapsTv.text = resources.getQuantityString(R.plurals.taps, touchCount, touchCount)
     }
 
     private fun prepareGame() {
@@ -55,8 +55,8 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
     }
 
     private fun startGame() {
-        tapsTv.text = getString(R.string.taps, 0)
         counterTv.text = getString(R.string.play)
+        tapsTv.text = resources.getQuantityString(R.plurals.taps, 0, 0)
 
         gameAreaView.apply {
             touchCounter = this@GameActivity
@@ -64,6 +64,7 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
         }
 
         viewAnimator.animate(tapIv)
+
         launchGameCountDownTimer()
     }
 
@@ -76,7 +77,7 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
         gameAreaView.apply {
             isTouchCountEnabled = false
             touchCounter = null
-            cancelTouchCount()
+            resetTouchCount()
         }
 
         viewAnimator.cancel()
@@ -93,10 +94,10 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
         viewModel.setTaps(gameAreaView.touchCount)
 
         // handle High Scores
-        GlobalScope.async {
+        GlobalScope.launch {
             val isMyScoreAddedAsHighScore = viewModel.addToHighScores()
             withContext(Dispatchers.Main) {
-                showResultAlertDialog(isMyScoreAddedAsHighScore)
+                showResultAlertDialog(isMyScoreAddedAsHighScore, viewModel.obtainResult())
             }
         }
     }
@@ -123,18 +124,17 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
         }.start()
     }
 
-    private fun showResultAlertDialog(isMyScoreHighScore: Boolean) {
-        AlertDialog.Builder(this@GameActivity)
+    private fun showResultAlertDialog(isMyScoreHighScore: Boolean, result: Int)
+        = AlertDialog.Builder(this@GameActivity)
             .apply {
                 setTitle(if(isMyScoreHighScore) getString(R.string.well_done_new_record) else getString(R.string.your_score))
-                setMessage(getString(R.string.you_ve_achieved_taps, viewModel.obtainResult()))
+                setMessage(resources.getQuantityString(R.plurals.you_ve_achieved_taps, result, result))
                 setIcon(R.drawable.ic_tap)
                 setPositiveButton(R.string.ok) { _, _ -> onNavigateUp() }
                 setCancelable(false)
                 create()
-                show()
-            }
-    }
+            }.show()
+
 
     private fun provideViewModel() = ViewModelProviders
         .of(this, ViewModelFactory(application))

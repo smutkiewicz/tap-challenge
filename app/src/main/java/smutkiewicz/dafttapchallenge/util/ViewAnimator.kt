@@ -2,22 +2,21 @@ package smutkiewicz.dafttapchallenge.util
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
-import android.widget.ImageView
+import android.view.View
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-
 
 class ViewAnimator {
 
-    private var scaleDown: ObjectAnimator? = null
+    private var animator: ObjectAnimator? = null
 
-    fun animate(imageView: ImageView) {
-        scaleDown = ObjectAnimator.ofPropertyValuesHolder(
-            imageView,
+    fun animate(view: View) {
+        animator = ObjectAnimator.ofPropertyValuesHolder(
+            view,
             PropertyValuesHolder.ofFloat("scaleX", 1.2f),
             PropertyValuesHolder.ofFloat("scaleY", 1.2f)
         )
 
-        scaleDown?.apply {
+        animator?.apply {
             duration = 400
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
@@ -26,5 +25,8 @@ class ViewAnimator {
         }
     }
 
-    fun cancel() = scaleDown?.cancel()
+    fun cancel() {
+        animator?.cancel()
+        animator = null
+    }
 }

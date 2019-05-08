@@ -10,7 +10,7 @@ class ScoresViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(score: Score) = with(itemView) {
         scorePositionTv.text = context.getString(R.string.score_position, score.position)
-        scoreTapsAmountTv.text = context.getString(R.string.score_amount_of_taps, score.amountOfTaps)
+        scoreTapsAmountTv.text = context.resources.getQuantityString(R.plurals.score_amount_of_taps, score.amountOfTaps, score.amountOfTaps)
         scoreTimestampTv.text = score.timestamp
     }
 }

@@ -9,7 +9,8 @@ class ScoresRepository(private val scoreDao: ScoreDao): Scores {
     override suspend fun add(score: Score): Boolean = withContext(Dispatchers.Default) {
         val scoresHigherThanMine = scoreDao.getScoresHigherThan(score.amountOfTaps)
 
-        if (scoresHigherThanMine.size < MAX_RESULTS) {
+        if (scoresHigherThanMine.size < MAX_RESULTS
+            && scoresHigherThanMine.all { s -> s.amountOfTaps != score.amountOfTaps }) {
             scoreDao.add(DbScore.fromEntity(score))
             return@withContext true
         }

@@ -10,15 +10,34 @@
     <string name="game_time">%s:%s</string>
     <string name="tap_as_much_as_it_s_possible">Tap as much as it\'s possible!</string>
     <string name="get_ready">Get ready!</string>
-    <string name="taps">%d taps!</string>
+
+    <plurals name="taps">
+        <item quantity="one">%d tap!</item>
+        <item quantity="few">%d taps!</item>
+        <item quantity="other">%d taps!</item>
+    </plurals>
 
     <!--Top Scores-->
     <string name="top_scores_title">Top Scores!</string>
-    <string name="score_amount_of_taps">%d Taps</string>
     <string name="score_sample_timestamp">2019/01/26 23:59:00</string>
+    <string name="score_sample_position">%d.</string>
     <string name="score_position">%d.</string>
-    <string name="you_ve_achieved_taps">You\'ve achieved %d taps!</string>
+
+    <string name="score_sample_amount_of_taps">0 Taps</string>
+    <plurals name="score_amount_of_taps">
+        <item quantity="one">%d Tap</item>
+        <item quantity="few">%d Taps</item>
+        <item quantity="other">%d Taps</item>
+    </plurals>
+
+    <!-- Alert Dialog-->
     <string name="your_score">Your Score</string>
     <string name="well_done_new_record">Well done, new record!</string>
     <string name="ok">OK</string>
+
+    <plurals name="you_ve_achieved_taps">
+        <item quantity="one">You\'ve achieved %d tap.</item>
+        <item quantity="few">You\'ve achieved %d taps!</item>
+        <item quantity="other">You\'ve achieved %d taps!</item>
+    </plurals>
 </resources>

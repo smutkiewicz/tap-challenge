@@ -34,7 +34,6 @@ dependencies {
     def lifecycle_ext = "2.0.0"
 
     def room_version = "2.1.0-alpha06"
-    def room_coroutines = "2.1.0-alpha04"
 
     def junit = "4.12"
     def test_runner = "1.1.0-alpha4"

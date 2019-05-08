@@ -22,7 +22,7 @@ class GameTouchCounterView @JvmOverloads constructor(context: Context, attrs: At
         return super.dispatchTouchEvent(event)
     }
 
-    fun cancelTouchCount() {
+    fun resetTouchCount() {
         touchCount = 0
     }
 

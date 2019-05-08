@@ -47,9 +47,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupHighScores() {
-        topScoresRv.adapter = adapter
-        topScoresRv.layoutManager = LinearLayoutManager(this)
-        topScoresRv.isNestedScrollingEnabled = false
+        topScoresRv.apply {
+            adapter = this@HomeActivity.adapter
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            isNestedScrollingEnabled = false
+        }
 
         GlobalScope.launch {
             adapter.items = viewModel.getTopFiveScores()
