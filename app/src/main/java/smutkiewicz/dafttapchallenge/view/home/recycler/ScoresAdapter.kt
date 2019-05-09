@@ -1,4 +1,4 @@
-package smutkiewicz.dafttapchallenge.view.scores
+package smutkiewicz.dafttapchallenge.view.home.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

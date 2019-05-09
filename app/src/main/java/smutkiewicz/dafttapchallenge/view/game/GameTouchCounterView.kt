@@ -33,6 +33,9 @@ class GameTouchCounterView @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
+    /**
+     * Interface to listen to counted touch events and retrieve their current count in Activity.
+     */
     interface TouchCounter {
 
         fun onTouchCount(touchCount: Int)

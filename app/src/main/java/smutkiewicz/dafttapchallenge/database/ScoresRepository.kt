@@ -7,10 +7,9 @@ import smutkiewicz.dafttapchallenge.entity.Score
 class ScoresRepository(private val scoreDao: ScoreDao): Scores {
 
     override suspend fun add(score: Score): Boolean = withContext(Dispatchers.Default) {
-        val scoresHigherThanMine = scoreDao.getScoresHigherThan(score.amountOfTaps)
+        val scoresEqualOrHigherThanMine = scoreDao.getScoresEqualOrHigherThan(score.amountOfTaps)
 
-        if (scoresHigherThanMine.size < MAX_RESULTS
-            && scoresHigherThanMine.all { s -> s.amountOfTaps != score.amountOfTaps }) {
+        if (checkIfMyScoreQualifiesToHighScores(scoresEqualOrHigherThanMine, score.amountOfTaps)) {
             scoreDao.add(DbScore.fromEntity(score))
             return@withContext true
         }
@@ -30,6 +29,10 @@ class ScoresRepository(private val scoreDao: ScoreDao): Scores {
             ?.toList()
             ?: emptyList()
     }
+
+    private fun checkIfMyScoreQualifiesToHighScores(scoresEqualOrHigherThanMine: List<DbScore>, amountOfTaps: Int)
+            = scoresEqualOrHigherThanMine.size < MAX_RESULTS
+            && scoresEqualOrHigherThanMine.all { s -> s.amountOfTaps != amountOfTaps }
 
     private companion object {
         const val MAX_RESULTS = 5

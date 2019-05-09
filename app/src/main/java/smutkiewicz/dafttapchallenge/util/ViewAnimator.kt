@@ -5,19 +5,19 @@ import android.animation.PropertyValuesHolder
 import android.view.View
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 
-class ViewAnimator {
+class ViewAnimator(private val view: View) {
 
     private var animator: ObjectAnimator? = null
 
-    fun animate(view: View) {
+    fun animate(scaleX: Float = 1.2f, scaleY: Float = 1.2f, duration: Long = 400) {
         animator = ObjectAnimator.ofPropertyValuesHolder(
             view,
-            PropertyValuesHolder.ofFloat("scaleX", 1.2f),
-            PropertyValuesHolder.ofFloat("scaleY", 1.2f)
+            PropertyValuesHolder.ofFloat("scaleX", scaleX),
+            PropertyValuesHolder.ofFloat("scaleY", scaleY)
         )
 
         animator?.apply {
-            duration = 400
+            this.duration = duration
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
             interpolator = FastOutSlowInInterpolator()
@@ -26,7 +26,8 @@ class ViewAnimator {
     }
 
     fun cancel() {
-        animator?.cancel()
+        animator?.reverse()
+        animator?.end()
         animator = null
     }
 }

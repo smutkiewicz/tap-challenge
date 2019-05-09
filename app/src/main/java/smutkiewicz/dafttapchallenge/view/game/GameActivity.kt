@@ -19,14 +19,18 @@ import smutkiewicz.dafttapchallenge.view.viewmodel.ViewModelFactory
 class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
 
     private val viewModel by lazy(::provideViewModel)
-    private val viewAnimator by lazy { ViewAnimator() }
+
+    private lateinit var tapImageAnimator: ViewAnimator
+    private lateinit var counterTvAnimator: ViewAnimator
 
     private lateinit var timer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+
+        tapImageAnimator = ViewAnimator(tapIv)
+        counterTvAnimator = ViewAnimator(counterTv)
     }
 
     override fun onResume() {
@@ -34,8 +38,8 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
         prepareGame()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         cancelGame()
     }
 
@@ -44,8 +48,12 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
     }
 
     private fun prepareGame() {
+        if (viewModel.checkIfGameIsFinished()) return
+
         tapsTv.text = getString(R.string.get_ready)
-        timerTv.text = getString(R.string.sample_game_time)
+        updateGameTimer(GAME_TIME_MILLIS)
+
+        counterTvAnimator.animate(counterTvScaleXY, counterTvScaleXY, 600)
 
         launchPrepareCountDownTimer()
     }
@@ -63,14 +71,16 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
             isTouchCountEnabled = true
         }
 
-        viewAnimator.animate(tapIv)
+        counterTvAnimator.cancel()
+        tapImageAnimator.animate()
 
         launchGameCountDownTimer()
     }
 
     private fun updateGameTimer(millisUntilFinished: Long) {
-        val timerText = viewModel.provideSecondsMillisText(millisUntilFinished)
+        val timerText = viewModel.provideSecondsMillisAndColorText(millisUntilFinished)
         timerTv.text = getString(R.string.game_time, timerText.first, timerText.second)
+        timerTv.setTextColor(timerText.third)
     }
 
     private fun cancelGame() {
@@ -80,7 +90,8 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
             resetTouchCount()
         }
 
-        viewAnimator.cancel()
+        counterTvAnimator.cancel()
+        tapImageAnimator.cancel()
         timer.cancel()
     }
 
@@ -90,8 +101,8 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
             touchCounter = null
         }
 
-        viewAnimator.cancel()
-        viewModel.setTaps(gameAreaView.touchCount)
+        tapImageAnimator.cancel()
+        viewModel.setTapsAndFinishGame(gameAreaView.touchCount)
 
         // handle High Scores
         GlobalScope.launch {
@@ -139,4 +150,9 @@ class GameActivity : AppCompatActivity(), GameTouchCounterView.TouchCounter {
     private fun provideViewModel() = ViewModelProviders
         .of(this, ViewModelFactory(application))
         .get(GameViewModel::class.java)
+
+    private companion object {
+        const val counterTvScaleXY = 1.8f
+        const val GAME_TIME_MILLIS = 5000L
+    }
 }

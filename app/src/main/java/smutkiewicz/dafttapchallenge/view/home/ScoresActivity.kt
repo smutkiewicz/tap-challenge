@@ -13,11 +13,11 @@ import kotlinx.coroutines.launch
 import smutkiewicz.dafttapchallenge.R
 import smutkiewicz.dafttapchallenge.util.IntentActionHelper
 import smutkiewicz.dafttapchallenge.view.game.GameActivity
-import smutkiewicz.dafttapchallenge.view.scores.ScoresAdapter
+import smutkiewicz.dafttapchallenge.view.home.recycler.ScoresAdapter
 import smutkiewicz.dafttapchallenge.view.viewmodel.HomeViewModel
 import smutkiewicz.dafttapchallenge.view.viewmodel.ViewModelFactory
 
-class HomeActivity : AppCompatActivity() {
+class ScoresActivity : AppCompatActivity() {
 
     private val viewModel by lazy(::provideViewModel)
     private val adapter by lazy { ScoresAdapter() }
@@ -48,8 +48,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupHighScores() {
         topScoresRv.apply {
-            adapter = this@HomeActivity.adapter
-            layoutManager = LinearLayoutManager(this@HomeActivity)
+            adapter = this@ScoresActivity.adapter
+            layoutManager = LinearLayoutManager(this@ScoresActivity)
             isNestedScrollingEnabled = false
         }
 

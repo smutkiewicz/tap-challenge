@@ -14,6 +14,6 @@ interface ScoreDao {
     fun get(): List<DbScore>
 
     @Query("SELECT * FROM dbscore WHERE amountOfTaps >= :amountOfTaps")
-    fun getScoresHigherThan(amountOfTaps: Int): List<DbScore>
+    fun getScoresEqualOrHigherThan(amountOfTaps: Int): List<DbScore>
 
 }
